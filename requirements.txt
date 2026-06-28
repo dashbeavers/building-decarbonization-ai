@@ -1,0 +1,9 @@
+numpy
+pandas
+geopandas
+folium
+matplotlib
+seaborn
+ipywidgets
+requests
+scipy
