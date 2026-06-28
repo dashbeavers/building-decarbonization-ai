@@ -24,7 +24,7 @@ building-decarbonization-ai/
 
 ## Quick Start
 
-1. Review the [Technical Specification](docs/technical_specification.pdf) for complete methodology
+1. Review the [Technical Specification](BuildingDecarbonizationAISystem.pdf) for complete methodology
 2. Install dependencies: `pip install -r requirements.txt`
 3. Run [`src/building_decarbonization_system.py`](src/building_decarbonization_system.py) for the main dashboard
 4. Run [`src/heat_pump_adoption_analysis.py`](src/heat_pump_adoption_analysis.py) for statistical validation
