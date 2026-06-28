@@ -339,7 +339,7 @@ def on_pipeline_compiled(b):
 def on_generate_pitch_clicked(b):
     email_output_pane.value = "⏳ <i>Running localized spatial scans and deploying proximity maps...</i>"
     pitch_text = build_personalized_pitch_and_map(current_filtered_slice, target_input_box.value)
-    email_output_pane.value = f"<div style='font-family: monospace; font-size: 13px; line-height: 1.6; color: #57cc99;'>{pitch_text}</div>"
+    email_output_pane.value = f"<div style='font-family: monospace; font-size: 13px; line-height: 1.6; color: #000000;'>{pitch_text}</div>"
 
 search_button.on_click(on_pipeline_compiled)
 generate_pitch_btn.on_click(on_generate_pitch_clicked)
