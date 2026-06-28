@@ -299,7 +299,6 @@ def draw_gis_command_center(focus_zip_code=None):
         pct_hp = (with_hp / total_b) * 100 if total_b > 0 else 0
         m_lat, m_lon = group['geometry'].y.mean(), group['geometry'].x.mean()
 
-        # FIX: Re-injected the NASA HVI Tier variable right into the popup HTML
         hvi_val = int(group['hvi_score_building'].iloc[0])
 
         icon_style_html = f"""
