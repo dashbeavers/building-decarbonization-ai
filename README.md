@@ -28,7 +28,7 @@ building-decarbonization-ai/
 2. Install dependencies: `pip install -r requirements.txt`
 3. Run [`src/building_decarbonization_system.py`](src/building_decarbonization_system.py) for the main dashboard
 4. Run [`src/heat_pump_adoption_analysis.py`](src/heat_pump_adoption_analysis.py) for statistical validation
-5. See [Screenshots](images) below for expected output
+5. See [images](images) below for expected output
 
 ## Features
 
