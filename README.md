@@ -9,18 +9,17 @@ This project develops an intelligent pipeline that identifies optimal buildings 
 ## Project Structure
 
 building-decarbonization-ai/
-├── README.md                               # Project overview and documentation
-├── src/
-│   ├── building_decarbonization_system.py  # Main AI system and interactive dashboard
-│   └── heat_pump_adoption_analysis.py      # Statistical analysis and correlation validation
-├── docs/
-│   └── technical_specification.pdf         # Complete system design and methodology
-├── images/
-│   ├── dashboard_interface.png             # Main search and filtering interface
-│   ├── interactive_map.png                 # Heat vulnerability map visualization
-│   ├── email_output.png                    # Generated email example
-│   └── analysis_chart.png                  # Heat pump adoption correlation analysis
-└── requirements.txt                        # Python dependencies
+README.md                               # Project overview and documentation
+src/
+* building_decarbonization_system.py  # Main AI system and interactive dashboard
+* heat_pump_adoption_analysis.py      # Statistical analysis and correlation validation
+BuildingDecarbonizationAISystem.pdf         # Complete system design and methodology
+images
+* dashboard_interface.png             # Main search and filtering interface
+* interactive_map.png                 # Heat vulnerability map visualization
+* email_output.png                    # Generated email example
+* analysis_chart.png                  # Heat pump adoption correlation analysis
+requirements.txt                        # Python dependencies
 
 ## Quick Start
 
