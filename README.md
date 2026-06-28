@@ -1,6 +1,6 @@
 # AI for Building Decarbonization
 
-AI-powered system for targeting building electrification outreach using energy data analysis and automated email generation.
+AI-powered system for targeting building electrification outreach in New York City using energy data analysis and automated email generation.
 
 ## Overview
 
