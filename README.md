@@ -13,8 +13,7 @@ building-decarbonization-ai/
 ├── src/
 │   ├── building_decarbonization_system.py  # Main AI system and dashboard
 │   └── heat_pump_adoption_analysis.py      # Statistical analysis and correlation validation
-├── docs/
-│   └── technical_specification.pdf         # Complete system design and methodology
+├── BuildingDecarbonizationAISystem.pdf     # Complete system design and methodology
 ├── images/
 │   ├── predictive_router.png               # Main search and filtering interface
 │   ├── citywide_leaderboard_map.png        # Heat vulnerability map visualization
