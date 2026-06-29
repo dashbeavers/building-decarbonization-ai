@@ -6,6 +6,24 @@ AI-powered system for targeting building electrification outreach in New York Ci
 
 This project develops an intelligent pipeline that identifies optimal buildings for heat pump installations and generates personalized marketing outreach. The system processes municipal energy data, applies AI filtering criteria, and creates targeted communications for clean energy adoption.
 
+## Project Structure
+```python
+building-decarbonization-ai/
+├── README.md                               # Project overview and documentation
+├── src/
+│   ├── building_decarbonization_system.py  # Main AI system and dashboard
+│   └── heat_pump_adoption_analysis.py      # Statistical analysis and correlation validation
+├── docs/
+│   └── technical_specification.pdf         # Complete system design and methodology
+├── images/
+│   ├── predictive_router.png               # Main search and filtering interface
+│   ├── citywide_leaderboard_map.png        # Heat vulnerability map visualization
+│   ├── email_generator.png                 # Generated email example
+│   └── heat_pump_adoption_analysis.png     # Heat pump adoption correlation analysis
+│   └── property_proximity.png              # Target building and closest green building
+└── requirements.txt                        # Python dependencies
+```
+
 ## Quick Start
 
 1. Review the [Technical Specification](BuildingDecarbonizationAISystem.pdf) for complete methodology
