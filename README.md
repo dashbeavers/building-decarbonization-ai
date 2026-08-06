@@ -37,6 +37,23 @@ candidates** ranked by heat vulnerability tier and inferred equipment age.
 9. **Draft outreach** — fill a template with address, equipment age, heat tier, and nearest comparable
 10. **Visualize** — interactive candidate table, proximity map, and citywide choropleth
 
+## Output
+
+**Candidate search** — ranked retrofit targets filtered by property type
+![Candidate search](images/Candidate_Search.png)
+
+**Proximity match** — target building and nearest all-electric comparable
+![All-electric proximity](images/All_Electric_Building_Proximity.png)
+
+**Heat vulnerability map** — ZIP-level tiers with per-ZIP candidate counts
+![Heat vulnerability map](images/Heat_Vulnerability_Map.png)
+
+**ZIP leaderboard** — neighborhoods ranked by candidate volume and heat tier
+![ZIP leaderboard](images/ZIP_Leaderboard.png)
+
+**Outreach draft** — template-filled letter using address, equipment age, heat tier, and nearest comparable
+![Outreach draft](images/Outreach_Draft.png)
+
 ## Method limits
 
 These are real constraints, not boilerplate. Read them before citing any number
