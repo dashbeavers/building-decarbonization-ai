@@ -40,18 +40,23 @@ candidates** ranked by heat vulnerability tier and inferred equipment age.
 ## Output
 
 **Candidate search** — ranked retrofit targets filtered by property type
+
 ![Candidate search](images/Candidate_Search.png)
 
-**Proximity match** — target building and nearest all-electric comparable
+**Proximity match** — target building and nearest all-electric comparable, measured in projected coordinates
+
 ![All-electric proximity](images/All_Electric_Building_Proximity.png)
 
-**Heat vulnerability map** — ZIP-level tiers with per-ZIP candidate counts
+**Heat vulnerability map** — ZIP-level tiers with per-ZIP candidate counts and electrification share
+
 ![Heat vulnerability map](images/Heat_Vulnerability_Map.png)
 
-**ZIP leaderboard** — neighborhoods ranked by candidate volume and heat tier
+**ZIP leaderboard** — neighborhoods ranked by candidate volume weighted by heat tier
+
 ![ZIP leaderboard](images/ZIP_Leaderboard.png)
 
-**Outreach draft** — template-filled letter using address, equipment age, heat tier, and nearest comparable
+**Outreach draft** — template-filled letter using address, inferred equipment age, heat tier, and nearest comparable
+
 ![Outreach draft](images/Outreach_Draft.png)
 
 ## Method limits
@@ -85,6 +90,8 @@ Testing all-electric share against heat vulnerability across 174 ZIP codes
 | Pearson r | −0.169 | 0.026 |
 | Pearson r (building-weighted) | −0.214 | — |
 
+![Validation](images/Validation_Result.png)
+
 **No significant monotonic relationship.** Spearman is the appropriate statistic
 here because the heat index is ordinal, and it does not clear significance. The
 two tests disagree because the pattern is not monotonic — tier means run 9.3,
@@ -103,6 +110,12 @@ is descriptive only.
 │   ├── building_decarbonization_system.py   # ingestion, screening, ranking, UI
 │   └── validation_analysis.py               # ZIP-level statistical validation
 ├── images/
+│   ├── Candidate_Search.png
+│   ├── All_Electric_Building_Proximity.png
+│   ├── Heat_Vulnerability_Map.png
+│   ├── ZIP_Leaderboard.png
+│   ├── Outreach_Draft.png
+│   └── Validation_Result.png
 └── requirements.txt
 ```
 
