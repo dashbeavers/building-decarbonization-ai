@@ -1,110 +1,114 @@
-# AI for Building Decarbonization
+# NYC Building Electrification Screening
 
-AI-powered system for targeting building electrification outreach in New York City using energy data analysis and automated email generation.
+Screens NYC building energy benchmarking data to rank buildings by heat pump
+retrofit potential, combining equipment-age inference with neighborhood heat
+vulnerability, and drafts owner outreach for the resulting shortlist.
 
-## Overview
+## What it does
 
-This project develops an intelligent pipeline that identifies optimal buildings for heat pump installations and generates personalized marketing outreach. The system processes municipal energy data, applies AI filtering criteria, and creates targeted communications for clean energy adoption.
+Municipal benchmarking disclosure tells you how much energy a building uses and
+what fuels it burns, but not which buildings are worth approaching about
+electrification. This pipeline turns that raw disclosure into a ranked target
+list.
 
-## Project Structure
-```python
-building-decarbonization-ai/
-├── README.md                               # Project overview and documentation
+At current scale it processes **30,938 building records across 271 ZIP codes**,
+joins neighborhood heat vulnerability at a **99.3% match rate**, identifies
+**1,993 already all-electric buildings**, and surfaces **1,459 retrofit
+candidates** ranked by heat vulnerability tier and inferred equipment age.
+
+## Data sources
+
+| Layer | Source | Notes |
+|---|---|---|
+| Buildings | NYC Open Data `5zyy-y8am` | LL84 energy benchmarking disclosure |
+| Heat vulnerability | NYC Open Data `4mhf-duep` | NYC DOHMH Heat Vulnerability Index, ordinal tiers 1-5, assigned by ZIP |
+| Geometry | NYC ZCTA polygons (GeoJSON) | For choropleth rendering |
+
+## Pipeline
+
+1. **Ingest** LL84 disclosure and the heat vulnerability index over HTTP
+2. **Resolve columns** dynamically, since the LL84 schema shifts between releases
+3. **Clean** — coerce numerics, drop ungeocoded rows, deduplicate by address
+4. **Classify fuel mix** — flag buildings reporting electricity and no gas or oil
+5. **Join thermal** — merge heat vulnerability by ZIP, leaving unmatched rows null
+6. **Filter candidates** — buildings built 2006-2011 that are not already all-electric
+7. **Rank** — order by heat vulnerability tier, then inferred equipment age
+8. **Proximity match** — find the nearest all-electric building in projected coordinates
+9. **Draft outreach** — fill a template with address, equipment age, heat tier, and nearest comparable
+10. **Visualize** — interactive candidate table, proximity map, and citywide choropleth
+
+## Method limits
+
+These are real constraints, not boilerplate. Read them before citing any number
+from this repo.
+
+- **All-electric is a proxy, not an observation.** LL84 reports fuel consumption,
+  not equipment type. A building reporting electricity with no gas or oil is
+  inferred to be all-electric. It may use resistance heating rather than a heat
+  pump.
+- **Blank does not mean zero, but is treated as zero.** LL84 records unused fuels
+  as "Not Available" rather than 0. The classifier treats a blank fossil column as
+  absent fuel. Under a strict reading that requires an explicit zero, the count is
+  0, since LL84 never writes one. The 1,993 figure is therefore an upper bound.
+- **Equipment age is inferred from construction year.** Buildings that already
+  replaced HVAC are indistinguishable from those that have not.
+- **Heat vulnerability is ZIP-level.** Every building in a ZIP shares one tier, and
+  that tier correlates with income and housing age.
+- **No trained model.** Targeting is deterministic rule-based filtering and ordinal
+  ranking. Outreach is template substitution. There is no ML component.
+
+## Validation result
+
+Testing all-electric share against heat vulnerability across 174 ZIP codes
+(30,698 buildings):
+
+| Statistic | Value | p |
+|---|---|---|
+| Spearman rho | −0.092 | 0.227 |
+| Pearson r | −0.169 | 0.026 |
+| Pearson r (building-weighted) | −0.214 | — |
+
+**No significant monotonic relationship.** Spearman is the appropriate statistic
+here because the heat index is ordinal, and it does not clear significance. The
+two tests disagree because the pattern is not monotonic — tier means run 9.3,
+7.5, 5.5, 7.2, 5.7, rising again at tier 4.
+
+The direction is nonetheless consistent with an equity gap: electrification is
+somewhat lower in more heat-vulnerable neighborhoods, which are also lower income
+with older housing stock. That confound is not controlled for here, so the result
+is descriptive only.
+
+## Repo structure
+
+```
+├── README.md
 ├── src/
-│   ├── building_decarbonization_system.py  # Main AI system and dashboard
-│   └── heat_pump_adoption_analysis.py      # Statistical analysis and correlation validation
-├── BuildingDecarbonizationAISystem.pdf     # Complete system design and methodology
+│   ├── building_decarbonization_system.py   # ingestion, screening, ranking, UI
+│   └── validation_analysis.py               # ZIP-level statistical validation
 ├── images/
-│   ├── predictive_router.png               # Main search and filtering interface
-│   ├── citywide_leaderboard_map.png        # Heat vulnerability map visualization
-│   ├── email_generator.png                 # Generated email example
-│   └── heat_pump_adoption_analysis.png     # Heat pump adoption correlation analysis
-│   └── property_proximity.png              # Target building and closest green building
-└── requirements.txt                        # Python dependencies
+└── requirements.txt
 ```
 
-## Quick Start
+## Running it
 
-1. Review the [Technical Specification](BuildingDecarbonizationAISystem.pdf) for complete methodology
-2. Install dependencies: `pip install -r requirements.txt`
-3. Run [`src/building_decarbonization_system.py`](src/building_decarbonization_system.py) for the main dashboard
-4. Run [`src/heat_pump_adoption_analysis.py`](src/heat_pump_adoption_analysis.py) for statistical validation
-5. See [images](images) below for expected output
+```bash
+pip install -r requirements.txt
+```
 
-## Features
+Run `building_decarbonization_system.py` first, then `validation_analysis.py` in
+the same session — the validation script reuses the loaded GeoDataFrame and the
+resolved column names.
 
-### 🏗️ Intelligent Building Analysis
-- **HVAC Replacement Window Detection**: Identifies buildings in optimal 15-20 year replacement cycles
-- **Heat Pump Classification**: Uses energy consumption patterns to detect existing electrification
-- **Priority Scoring**: Ranks buildings using NASA ECOSTRESS thermal vulnerability data
+If the NYC Open Data API is unreachable the script falls back to clearly labelled
+demo data, prints a warning block, and renders a red banner in the UI. Demo
+output is not real and should not be cited.
 
-### 📧 Automated Outreach Generation
-- **Personalized Cold Emails**: Generates location-specific marketing content
-- **Social Proof Integration**: Finds nearby successful electrification examples
-- **Local Context**: Incorporates neighborhood landmarks and thermal conditions
+## Development note
 
-### 📊 Geospatial Visualization
-- **Interactive Maps**: Real-time building data visualization with heat vulnerability overlays
-- **Proximity Analysis**: Identifies relationships between nearby properties
-- **Statistical Validation**: Correlation analysis between thermal stress and adoption rates
-
-## Technical Architecture
-
-### Core Pipeline (11-Step Process)
-1. **API Data Ingestion** - Municipal building energy data (NYC Open Data)
-2. **Data Cleaning** - Address deduplication and column standardization  
-3. **Fuel Mix Classification** - Heat pump identification algorithm
-4. **Thermal Data Integration** - NASA satellite heat island data merge
-5. **Target Filtering** - HVAC age and building type criteria
-6. **Priority Ranking** - Heat vulnerability and equipment age scoring
-7. **Geographic Processing** - Coordinate mapping and spatial analysis
-8. **Proximity Matching** - Nearby electrified building detection
-9. **Email Generation** - Personalized outreach content creation
-10. **Interactive Visualization** - Real-time dashboard and mapping
-11. **Statistical Validation** - Adoption correlation analysis
-
-## Code Structure
-
-### Main System
-`building_decarbonization_system.py` - Complete AI targeting and outreach platform
-- Interactive dashboard with search and filtering
-- Real-time map visualization with heat vulnerability layers
-- Automated email generation with local context
-- Proximity-based social proof identification
-
-### Analysis Module  
-`heat_pump_adoption_analysis.py` - Statistical validation and correlation analysis
-- Pearson correlation between thermal stress and adoption rates
-- Geospatial visualization of adoption patterns
-- Building density analysis by ZIP code
-
-## Technologies Used
-
-- **Python** - Core data processing and analysis
-- **Pandas/NumPy** - Data manipulation and numerical computing
-- **GeoPandas** - Geospatial data processing
-- **Folium** - Interactive mapping and visualization
-- **Matplotlib/Seaborn** - Statistical plotting and analysis
-- **IPython Widgets** - Interactive dashboard interface
-- **Municipal APIs** - Real-time building energy data
-- **NASA ECOSTRESS** - Satellite thermal vulnerability data
-
-## Key Results
-
-- **Personalized outreach** with neighborhood-specific landmarks and social proof
-- **Heat vulnerability correlation** analysis showing relationship between thermal stress and adoption patterns
-- **Real-time targeting** of optimal electrification candidates
-
-## Installation & Usage
-
-### Requirements
-```python
-numpy
-pandas
-geopandas
-folium
-matplotlib
-seaborn
-ipywidgets
-requests
-scipy
+An earlier version of this pipeline contained a fallback that randomly flagged
+25% of buildings as electrified whenever real detections fell below a threshold.
+Real detections were zero, because the classifier tested `fuel == 0` against
+values that pandas had coerced to `NaN`, so every genuinely all-electric building
+failed the test. The fallback masked the bug, and the validation correlation was
+measuring random noise. Both issues are fixed; the fallback is removed and the
+classifier is NaN-aware.
